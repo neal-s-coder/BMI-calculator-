@@ -1,0 +1,78 @@
+def calculate_bmi(weight, height, unit='metric'):
+    """
+    Calculate BMI given a weight and height, supporting both metric and imperial units.
+    
+    :param weight: Weight in kilograms or pounds
+    :param height: Height in meters or inches
+    :param unit: Unit system, either 'metric' or 'imperial'
+    :return: BMI value
+    """
+    if unit == 'imperial':
+        weight = weight * 0.45359237  # Convert pounds to kilograms
+        height = height * 0.0254      # Convert inches to meters
+
+    try:
+        bmi = weight / (height ** 2)
+        return bmi
+    except ZeroDivisionError:
+        return "Height cannot be zero."
+
+def bmi_category(bmi):
+    """
+    Determine the BMI category.
+    
+    :param bmi: BMI value
+    :return: Category as a string
+    """
+    if bmi < 18.5:
+        return "Underweight"
+    elif 18.5 <= bmi < 24.9:
+        return "Normal weight"
+    elif 25 <= bmi < 29.9:
+        return "Overweight"
+    else:
+        return "Obesity"
+
+def get_float_input(prompt):
+    """
+    Get a float input from the user with validation.
+    
+    :param prompt: Input prompt string
+    :return: Validated float value
+    """
+    while True:
+        try:
+            value = float(input(prompt))
+            if value > 0:
+                return value
+            else:
+                print("Please enter a positive number.")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+
+def main():
+    """
+    Main function to input weight and height, calculate BMI, and display the result and category.
+    Supports both metric and imperial units.
+    """
+    unit = input("Choose unit system (metric/imperial): ").strip().lower()
+    if unit not in ['metric', 'imperial']:
+        print("Invalid unit system. Please choose 'metric' or 'imperial'.")
+        return
+
+    if unit == 'metric':
+        weight = get_float_input("Enter your weight in kilograms: ")
+        height = get_float_input("Enter your height in meters: ")
+    else:
+        weight = get_float_input("Enter your weight in pounds: ")
+        height = get_float_input("Enter your height in inches: ")
+
+    bmi = calculate_bmi(weight, height, unit)
+    if isinstance(bmi, str):
+        print(bmi)
+    else:
+        print(f"Your BMI is: {bmi:.2f}")
+        print(f"BMI Category: {bmi_category(bmi)}")
+
+if __name__ == "__main__":
+    main()
